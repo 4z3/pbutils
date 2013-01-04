@@ -1,0 +1,33 @@
+#! /bin/sh
+#
+# Download Umsatzauskunft-CSV of the last 100 days (incl. today)
+#
+# example usage:
+#   JSESSIONID=`PB_nutzername=... PB_kennwort=... login` csvHerunterladen
+#
+set -euf
+
+JSESSIONID="${JSESSIONID}"
+
+# obtain magic number (which changes every bookmarkablePage-request(?))
+magic=$(
+  curl -k -sS -b JSESSIONID=$JSESSIONID \
+    https://banking.postbank.de/rai/?wicket:bookmarkablePage=:de.postbank.ucp.application.rai.fs.umsatzauskunft.UmsatzauskunftPage |
+  sed -n 's/.*?wicket:interface=:\([^:]\+\):.*/\1/p;T;q' |
+  grep .
+)
+
+# setup Umsatzauskunft to display last 100 days
+vonDatum=`date -d '-99 days' +%d.%m.%Y`
+bisDatum=`date +%d.%m.%Y`
+curl -k -sS -b JSESSIONID=$JSESSIONID \
+  -d umsatzanzeigeGiro:salesForm:umsatzFilterOptionenAufklappbarSuchfeldPanel:accordion:vonBisDatum:datumForm:vonGruppe:vonDatum=$vonDatum \
+  -d umsatzanzeigeGiro:salesForm:umsatzFilterOptionenAufklappbarSuchfeldPanel:accordion:vonBisDatum:datumForm:bisGruppe:bisDatum=$bisDatum \
+  -o /dev/null \
+  https://banking.postbank.de/rai/?wicket:interface=:$magic:umsatzauskunftContainer:umsatzauskunftpanel:panel:form::IFormSubmitListener::
+
+# download CSV and convert to UTF-8
+curl -k -sS -b JSESSIONID=$JSESSIONID \
+  https://banking.postbank.de/rai/?wicket:interface=:$magic:umsatzauskunftContainer:umsatzauskunftpanel:panel:form:umsatzanzeigeGiro:umsatzaktionen:umsatzanzeigeUndFilterungDownloadlinksPanel:csvHerunterladen::IResourceListener:: |
+sed "s/`printf '\x80'`/EUR/g" |
+iconv -f latin1 -t utf-8
