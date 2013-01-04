@@ -11,9 +11,9 @@ magic=$(
   grep .
 )
 
-# setup Umsatzauskunft to display last 100 days
-vonDatum=`date -d '-99 days' +%d.%m.%Y`
-bisDatum=`date +%d.%m.%Y`
+# setup Umsatzauskunft to display the desired range of entries
+vonDatum=`date -d "${1--99days}" +%d.%m.%Y`
+bisDatum=`date -d "${2-today}" +%d.%m.%Y`
 curl -k -sS -b JSESSIONID=$JSESSIONID \
   -d umsatzanzeigeGiro:salesForm:umsatzFilterOptionenAufklappbarSuchfeldPanel:accordion:vonBisDatum:datumForm:vonGruppe:vonDatum=$vonDatum \
   -d umsatzanzeigeGiro:salesForm:umsatzFilterOptionenAufklappbarSuchfeldPanel:accordion:vonBisDatum:datumForm:bisGruppe:bisDatum=$bisDatum \
