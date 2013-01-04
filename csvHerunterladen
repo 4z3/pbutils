@@ -15,6 +15,7 @@ magic=$(
 vonDatum=`date -d "${1--99days}" +%d.%m.%Y`
 bisDatum=`date -d "${2-today}" +%d.%m.%Y`
 curl -k -sS -b JSESSIONID=$JSESSIONID \
+  -d umsatzanzeigeGiro:salesForm:umsatzFilterOptionenAufklappbarSuchfeldPanel:gebuchtVorgemerktUmschalter:gebuchtVorgemerktUmschalterRadioGroup=radio0 \
   -d umsatzanzeigeGiro:salesForm:umsatzFilterOptionenAufklappbarSuchfeldPanel:accordion:vonBisDatum:datumForm:vonGruppe:vonDatum=$vonDatum \
   -d umsatzanzeigeGiro:salesForm:umsatzFilterOptionenAufklappbarSuchfeldPanel:accordion:vonBisDatum:datumForm:bisGruppe:bisDatum=$bisDatum \
   -o /dev/null \
