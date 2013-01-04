@@ -1,8 +1,12 @@
 # pbutils
 
-Postbank Online-Banking Command-Line Interface
+[Postbank Online-Banking](https://banking.postbank.de/rai/login)
+Command-Line Interface
 
-# quickstart
+# quickstart guide
+
+This quickstart guide shows how pbutils could be used from some shell.
+Any `...` has to be replaced with the obvious content.
 
 ## login
 
