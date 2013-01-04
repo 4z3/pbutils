@@ -1,12 +1,4 @@
 #! /bin/sh
-#
-# Postbank Online-Banking Login
-#
-# example usage:
-#   if JSESSIONID=`PB_nutzername=... PB_kennwort=... login`; then
-#     # do online banking stuff
-#   fi
-#
 set -euf
 
 nutzername="${PB_nutzername}"

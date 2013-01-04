@@ -1,10 +1,4 @@
 #! /bin/sh
-#
-# Download Umsatzauskunft-CSV of the last 100 days (incl. today)
-#
-# example usage:
-#   JSESSIONID=`PB_nutzername=... PB_kennwort=... login` csvHerunterladen
-#
 set -euf
 
 JSESSIONID="${JSESSIONID}"
