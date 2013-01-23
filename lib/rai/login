@@ -1,6 +1,10 @@
 #! /bin/sh
 set -euf
 
+if test -e "$HOME/.pbutilsrc"; then
+  . "$HOME/.pbutilsrc"
+fi
+
 nutzername="${PB_nutzername}"
 kennwort="${PB_kennwort}"
 
