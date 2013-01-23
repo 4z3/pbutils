@@ -17,7 +17,10 @@ fi
 
 cd "$1"
 
-JSESSIONID=`$pbutil/rai/login` $pbutil/rai/csvHerunterladen |
+if ! export JSESSIONID=`$pbutil/rai/login`; then
+  echo "$0: login failed" >&2; exit 3
+fi
+$pbutil/rai/csvHerunterladen |
 $pbutil/importer/split head body
 
 # TODO more accurate check?
