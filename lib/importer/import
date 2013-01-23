@@ -17,8 +17,10 @@ fi
 
 cd "$1"
 
-if ! export JSESSIONID=`$pbutil/rai/login`; then
+if ! JSESSIONID=`$pbutil/rai/login`; then
   echo "$0: login failed" >&2; exit 3
+else
+  export JSESSIONID
 fi
 $pbutil/rai/csvHerunterladen |
 $pbutil/importer/split head body
