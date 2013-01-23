@@ -7,9 +7,9 @@ case $# in
 esac
 
 if test -e "$1"; then
-  case `ls -a "$1" | grep -v '^\.\.\?$' | wc -l` in
-    (0) :;;
-    (*) echo "directory is not empty: $1" >&2; exit 2
+  case `ls -a "$1" | wc -l` in
+    (2) :;;
+    (*) echo "$0: bad directory: $1" >&2; exit 2
   esac
 fi
 
