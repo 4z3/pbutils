@@ -1,0 +1,18 @@
+#! /bin/sh
+set -euf
+case $# in
+  (0) set -- "$PWD";;
+  (1) :;;
+  (*) echo "usage: $0 [directory]" >&2; exit 1
+esac
+
+if test -e "$1"; then
+  case `ls -a "$1" | grep -v '^\.\.\?$' | wc -l` in
+    (0) :;;
+    (*) echo "directory is not empty: $1" >&2; exit 2
+  esac
+fi
+
+# assert: $1 is either inexistent or an empty directory
+git init "$1"
+echo 1 > "$1/.git/pbutil.importer.version"

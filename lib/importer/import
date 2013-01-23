@@ -1,0 +1,27 @@
+#! /bin/sh
+set -euf
+case $# in
+  (0) set -- "$PWD";;
+  (1) :;;
+  (*) echo "usage: $0 [directory]" >&2; exit 1
+esac
+
+pbutil="$(dirname "$(dirname "$(readlink -f "$0")")")"
+
+# TODO more accurate check?
+if ! test -e "$1/.git/pbutil.importer.version"; then
+  echo "$0: not an importer directory: $1" >&2; exit 2
+elif ! echo 1 | diff - "$1/.git/pbutil.importer.version" >/dev/null; then
+  echo "$0: bad directory: $1" >&2; exit 2
+fi
+
+cd "$1"
+
+JSESSIONID=`$pbutil/rai/login` $pbutil/rai/csvHerunterladen |
+$pbutil/importer/split head body
+
+# TODO more accurate check?
+if git status --porcelain | grep -q .; then
+  git add head body
+  git commit -m bump
+fi

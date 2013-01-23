@@ -1,0 +1,14 @@
+#! /bin/sh
+set -euf
+case $# in
+  (2) :;;
+  (*) echo "usage: $0 headoutfile bodyoutfile" >&2; exit 1
+esac
+
+T="`mktemp --tmpdir -d pb.importer.split.XXXXXXXX`"
+
+csplit -s -f "$T/" -n 1 - /^$/ %.%
+mv "$T/0" "$1"
+mv "$T/1" "$2"
+
+rmdir "$T"
